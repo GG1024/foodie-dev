@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lucky.mapper.ItemsDao">
+
+	<resultMap id="BaseResultMap" type="com.lucky.pojo.Items">
+		<id column="id" property="id" />
+		<id column="item_name" property="itemName" />
+		<id column="cat_id" property="catId" />
+		<id column="root_cat_id" property="rootCatId" />
+		<id column="sell_counts" property="sellCounts" />
+		<id column="on_off_status" property="onOffStatus" />
+		<id column="content" property="content" />
+		<id column="create_time" property="createTime" />
+		<id column="update_time" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, item_name, cat_id, root_cat_id, sell_counts, on_off_status, content, create_time, update_time
+	</sql>
+	
+</mapper>

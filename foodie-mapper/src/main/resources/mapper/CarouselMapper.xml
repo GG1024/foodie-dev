@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lucky.mapper.CarouselDao">
+
+	<resultMap id="BaseResultMap" type="com.lucky.pojo.Carousel">
+		<id column="id" property="id" />
+		<id column="image_url" property="imageUrl" />
+		<id column="background_color" property="backgroundColor" />
+		<id column="item_id" property="itemId" />
+		<id column="cat_id" property="catId" />
+		<id column="type" property="type" />
+		<id column="sort" property="sort" />
+		<id column="is_show" property="isShow" />
+		<id column="create_time" property="createTime" />
+		<id column="update_time" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, image_url, background_color, item_id, cat_id, type, sort, is_show, create_time, update_time
+	</sql>
+	
+</mapper>

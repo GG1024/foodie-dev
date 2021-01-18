@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lucky.mapper.ItemsParamDao">
+
+	<resultMap id="BaseResultMap" type="com.lucky.pojo.ItemsParam">
+		<id column="id" property="id" />
+		<id column="item_id" property="itemId" />
+		<id column="produc_place" property="producPlace" />
+		<id column="foot_period" property="footPeriod" />
+		<id column="brand" property="brand" />
+		<id column="factory_name" property="factoryName" />
+		<id column="factory_address" property="factoryAddress" />
+		<id column="packaging_method" property="packagingMethod" />
+		<id column="weight" property="weight" />
+		<id column="storage_method" property="storageMethod" />
+		<id column="eat_method" property="eatMethod" />
+		<id column="create_time" property="createTime" />
+		<id column="update_time" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, item_id, produc_place, foot_period, brand, factory_name, factory_address, packaging_method, weight, storage_method, eat_method, create_time, update_time
+	</sql>
+	
+</mapper>

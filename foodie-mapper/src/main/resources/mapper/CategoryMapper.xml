@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lucky.mapper.CategoryDao">
+
+	<resultMap id="BaseResultMap" type="com.lucky.pojo.Category">
+		<id column="id" property="id" />
+		<id column="name" property="name" />
+		<id column="type" property="type" />
+		<id column="father_id" property="fatherId" />
+		<id column="logo" property="logo" />
+		<id column="slogan" property="slogan" />
+		<id column="cat_image" property="catImage" />
+		<id column="bg_color" property="bgColor" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, type, father_id, logo, slogan, cat_image, bg_color
+	</sql>
+	
+</mapper>

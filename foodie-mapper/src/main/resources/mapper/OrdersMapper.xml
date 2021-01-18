@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lucky.mapper.OrdersDao">
+
+	<resultMap id="BaseResultMap" type="com.lucky.pojo.Orders">
+		<id column="id" property="id" />
+		<id column="user_id" property="userId" />
+		<id column="receiver_name" property="receiverName" />
+		<id column="receiver_mobile" property="receiverMobile" />
+		<id column="receiver_address" property="receiverAddress" />
+		<id column="total_amount" property="totalAmount" />
+		<id column="real_pay_amount" property="realPayAmount" />
+		<id column="post_amount" property="postAmount" />
+		<id column="pay_method" property="payMethod" />
+		<id column="left_msg" property="leftMsg" />
+		<id column="extand" property="extand" />
+		<id column="is_comment" property="isComment" />
+		<id column="is_delete" property="isDelete" />
+		<id column="created_time" property="createdTime" />
+		<id column="update_time" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_id, receiver_name, receiver_mobile, receiver_address, total_amount, real_pay_amount, post_amount, pay_method, left_msg, extand, is_comment, is_delete, created_time, update_time
+	</sql>
+	
+</mapper>
