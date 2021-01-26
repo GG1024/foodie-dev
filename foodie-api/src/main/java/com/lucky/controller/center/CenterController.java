@@ -1,7 +1,7 @@
 package com.lucky.controller.center;
 
 import com.lucky.core.JsonResult;
-import com.lucky.service.CenterUserService;
+import com.lucky.service.center.CenterUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -6,9 +6,11 @@
  */
 package com.lucky.service.impl;
 
+import com.lucky.bo.UserBO;
 import com.lucky.pojo.Users;
-import com.lucky.mapper.UsersDao;
+import com.lucky.mapper.UsersMapper;
 import com.lucky.service.UsersService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
@@ -20,6 +22,20 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
  * 
  */
 @Service
-public class UsersServiceImpl  extends ServiceImpl<UsersDao, Users> implements UsersService  {
-	
+@Slf4j
+public class UsersServiceImpl  extends ServiceImpl<UsersMapper, Users> implements UsersService  {
+    @Override
+    public boolean queryUsernameIsExist(String username) {
+        return false;
+    }
+
+    @Override
+    public Users register(UserBO userBO) {
+        return null;
+    }
+
+    @Override
+    public Users login(String username, String md5Str) {
+        return null;
+    }
 }

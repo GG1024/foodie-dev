@@ -2,7 +2,7 @@ package com.lucky.controller.center;
 
 import com.lucky.core.JsonResult;
 import com.lucky.pojo.Orders;
-import com.lucky.service.CenterOrderService;
+import com.lucky.service.center.CenterOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

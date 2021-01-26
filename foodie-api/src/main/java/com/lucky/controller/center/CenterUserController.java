@@ -5,7 +5,7 @@ import com.lucky.config.FileUpload;
 import com.lucky.controller.BaseController;
 import com.lucky.core.JsonResult;
 import com.lucky.pojo.Users;
-import com.lucky.service.CenterUserService;
+import com.lucky.service.center.CenterUserService;
 import com.lucky.utils.CookieUtils;
 import com.lucky.utils.DateUtil;
 import com.lucky.utils.JsonUtils;

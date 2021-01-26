@@ -8,6 +8,7 @@ package com.lucky.service;
 import com.lucky.pojo.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lucky.vo.CategoryVo;
+import com.lucky.vo.NewItemsVo;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public interface CategoryService extends IService<Category> {
 
     List<CategoryVo> querySubCatList(Integer rootCatId);
 
-    String getSixNewItemsList(Integer rootCatId);
+    List<NewItemsVo> getSixNewItemsList(Integer rootCatId);
 }
