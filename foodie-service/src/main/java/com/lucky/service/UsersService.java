@@ -6,6 +6,7 @@
  */
 package com.lucky.service;
 
+import com.lucky.bo.UserBO;
 import com.lucky.pojo.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
 /**   
@@ -15,5 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * 
  */
 public interface UsersService extends IService<Users> {
-	
+
+    boolean queryUsernameIsExist(String username);
+
+    Users register(UserBO userBO);
+
+    Users login(String username, String md5Str);
 }

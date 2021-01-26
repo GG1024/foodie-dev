@@ -8,12 +8,16 @@ package com.lucky.service;
 
 import com.lucky.pojo.Carousel;
 import com.baomidou.mybatisplus.extension.service.IService;
-/**   
+
+import java.util.List;
+
+/**
  * @Description:TODO(轮播图服务层)
  * @version: 
  * @author: 欧阳小广
  * 
  */
 public interface CarouselService extends IService<Carousel> {
-	
+
+    List<Carousel> queryAll(Integer code);
 }
