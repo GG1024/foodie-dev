@@ -55,10 +55,10 @@ public class Orders extends Model<Orders> {
 	private BigDecimal realPayAmount;
     
 	@ApiModelProperty(name = "postAmount" , value = "默认可以为零，代表包邮")
-	private BigDecimal postAmount;
+	private int postAmount;
     
 	@ApiModelProperty(name = "payMethod" , value = "1:微信 2:支付宝")
-	private String payMethod;
+	private int payMethod;
     
 	@ApiModelProperty(name = "leftMsg" , value = "")
 	private String leftMsg;
@@ -67,10 +67,10 @@ public class Orders extends Model<Orders> {
 	private String extand;
     
 	@ApiModelProperty(name = "isComment" , value = "1：已评价，0：未评价")
-	private String isComment;
+	private int isComment;
     
 	@ApiModelProperty(name = "isDelete" , value = "1: 删除 0:未删除")
-	private String isDelete;
+	private int isDelete;
     
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")

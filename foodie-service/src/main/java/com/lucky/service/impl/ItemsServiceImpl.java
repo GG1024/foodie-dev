@@ -12,7 +12,10 @@ import com.lucky.enums.Level;
 import com.lucky.mapper.*;
 import com.lucky.pojo.*;
 import com.lucky.service.ItemsService;
+import com.lucky.utils.DesensitizationUtil;
 import com.lucky.vo.CountsVo;
+import com.lucky.vo.ItemsCommentsVo;
+import com.lucky.vo.SearchItemsVo;
 import com.lucky.vo.ShopcartVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description:TODO(商品表服务实现)
@@ -109,28 +114,69 @@ public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements
     }
 
     @Override
-    public IPage queryItemsComment(String itemId, Integer level, Integer page, Integer pageSize) {
-        QueryWrapper<ItemsComments> where = new QueryWrapper<>();
-        where.lambda().eq(ItemsComments::getItemId, itemId);
-        where.lambda().eq(ItemsComments::getCommentLevel, level);
-        IPage<ItemsComments> itemsCommentsIPage = itemsCommentsMapper.selectPage(new Page<>(page, pageSize), where);
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<ItemsCommentsVo> queryItemsComment(String itemId, Integer level) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("itemId", itemId);
+        map.put("level", level);
+        List<ItemsCommentsVo> itemsCommentsVos = itemsMapperCustom.queryItemComments(map);
         //用户昵称脱敏
-//        itemsCommentsIPage.getRecords().stream().forEach(itemsComments -> itemsComments.set);
-        return itemsCommentsIPage;
+        itemsCommentsVos.stream().forEach(itemsCommentsVo -> itemsCommentsVo.setNickname(DesensitizationUtil.commonDisplay(itemsCommentsVo.getNickname())));
+        return itemsCommentsVos;
     }
 
     @Override
-    public IPage searchItems(String keywords, String sort, Integer page, Integer pageSize) {
-        return null;
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public ItemsSpec queryItemSpecById(String specId) {
+        return itemsSpecMapper.selectById(specId);
     }
 
     @Override
-    public IPage searchItemsByThirdCat(String catId, String sort, Integer page, Integer pageSize) {
-        return null;
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public ItemsImg queryItemMainImg(String itemId) {
+        QueryWrapper<ItemsImg> where = new QueryWrapper<>();
+        where.lambda().eq(ItemsImg::getItemId, itemId);
+        return itemsImgMapper.selectOne(where);
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<SearchItemsVo> searchItems(String keywords, String sort) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+
+        List<SearchItemsVo> searchItemsVos = itemsMapperCustom.searchItems(map);
+        return searchItemsVos;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<SearchItemsVo> searchItemsByThirdCat(String catId, String sort) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("catId", catId);
+        map.put("sort", sort);
+
+        List<SearchItemsVo> searchItemsVos = itemsMapperCustom.searchItemsByThirdCat(map);
+        return searchItemsVos;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<ShopcartVo> refreshShopCartWithSpeIds(String itemSpecIds) {
-        return null;
+        String[] split = itemSpecIds.split(",");
+        return itemsMapperCustom.refreshShopCartWithSpeIds(split);
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void decreaseItemSpecStock(String itemSpecId, int buyCount) {
+        int count = itemsMapperCustom.decreaseItemSpecStock(itemSpecId, buyCount);
+        if (count!=1){
+            throw new RuntimeException("库存扣减失败，库存不足");
+        }
     }
 }

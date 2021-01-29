@@ -1,11 +1,14 @@
 package com.lucky.controller.center;
 
 import com.lucky.bo.OrderItemsCommentBO;
+import com.lucky.core.AbstractController;
 import com.lucky.core.JsonResult;
 import com.lucky.pojo.OrderItems;
 import com.lucky.pojo.Orders;
 import com.lucky.service.center.CenterCommentsService;
 import com.lucky.service.center.CenterOrderService;
+import com.lucky.utils.PageResult;
+import com.lucky.vo.MyCommentVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,7 +28,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/mycomments")
-public class CenterCommentsController {
+public class CenterCommentsController extends AbstractController {
 
 
     @Autowired
@@ -75,13 +78,15 @@ public class CenterCommentsController {
 
     @ApiOperation(value = "查询我的评论", notes = "查询我的评论", httpMethod = "POST")
     @PostMapping("/query")
-    public JsonResult searchItems(
+    public PageResult searchItems(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
-            @ApiParam(name = "page", value = "页码")
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @ApiParam(name = "pageNum", value = "页码")
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
-        return jsonResult.success(centerCommentsService.queryMyComments(userId,page,pageSize));
+        startPage();
+        List<MyCommentVO> myCommentVOS = centerCommentsService.queryMyComments(userId);
+        return PageResult.setPageResult(myCommentVOS, pageNum);
     }
 }

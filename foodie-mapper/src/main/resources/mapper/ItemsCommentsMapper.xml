@@ -17,5 +17,62 @@
 	<sql id="Base_Column_List">
 		id, user_id, item_id, item_name, item_spec_id, sepc_name, comment_level, content, create_time, update
 	</sql>
-	
+
+
+	<insert id="batchSaveComments" parameterType="map">
+		insert
+		into items_comments
+		(
+		id,
+		user_id,
+		item_id,
+		item_name,
+		item_spec_id,
+		sepc_name,
+		comment_level,
+		content,
+		created_time,
+		updated_time
+		)
+		values
+		<foreach collection="map.orderItemsCommentBOList" item="item" separator=",">
+			(
+			#{item.commentId},
+			#{map.userId},
+			#{item.itemId},
+			#{item.itemName},
+			#{item.itemSpecId},
+			#{item.itemSpecName},
+			#{item.commentLevel},
+			#{item.content},
+			now(),
+			now()
+			)
+		</foreach>
+	</insert>
+
+
+	<select id="queryMyComments" resultType="com.lucky.vo.MyCommentVO">
+	SELECT
+    ic.id commentId,
+    ic.content content,
+    ic.created_time createdTime,
+    ic.item_id itemId,
+    ic.item_name itemName,
+    ic.sepc_name specName,
+    ii.url itemImg
+    FROM
+    items_comments ic
+    LEFT JOIN
+    items_img ii
+    ON
+    ic.item_id = ii.item_id
+    WHERE
+    ic.user_id = #{userId}
+    AND
+    ii.is_main = 1
+    ORDER BY
+    ic.created_time DESC
+	</select>
+
 </mapper>

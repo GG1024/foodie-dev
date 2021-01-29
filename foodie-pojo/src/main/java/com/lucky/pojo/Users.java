@@ -57,7 +57,7 @@ public class Users extends Model<Users> {
 	private String email;
     
 	@ApiModelProperty(name = "sex" , value = "性别 1:男  0:女  2:保密")
-	private String sex;
+	private int sex;
     
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")

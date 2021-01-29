@@ -1,8 +1,12 @@
 package com.lucky.controller.center;
 
+import com.lucky.core.AbstractController;
 import com.lucky.core.JsonResult;
+import com.lucky.pojo.OrderStatus;
 import com.lucky.pojo.Orders;
 import com.lucky.service.center.CenterOrderService;
+import com.lucky.utils.PageResult;
+import com.lucky.vo.MyOrdersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -10,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @description: 用户中心我的订单相关接口
@@ -20,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/myorders")
-public class CenterOrdersController {
+public class CenterOrdersController extends AbstractController {
 
 
     @Autowired
@@ -30,17 +36,19 @@ public class CenterOrdersController {
 
     @ApiOperation(value = "查询用户订单", notes = "查询用户订单", httpMethod = "GET")
     @PostMapping("/query")
-    public JsonResult searchItems(
+    public PageResult<MyOrdersVO> searchItems(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
             @ApiParam(name = "orderStatus", value = "orderStatus")
             @RequestParam(value = "orderStatus") Integer orderStatus,
-            @ApiParam(name = "page", value = "页码")
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @ApiParam(name = "pageNum", value = "页码")
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
     ) {
-        return jsonResult.success(centerOrderService.queryMyOrders(userId, orderStatus, page, pageSize));
+        startPage();
+        List<MyOrdersVO> ordersVOList = centerOrderService.queryMyOrders(userId, orderStatus);
+        return PageResult.setPageResult(ordersVOList, pageNum);
     }
 
 
@@ -120,14 +128,15 @@ public class CenterOrdersController {
 
     @ApiOperation(value = "查询用户订单", notes = "查询用户订单", httpMethod = "GET")
     @PostMapping("/trend")
-    public JsonResult getMyOrderTrend(
+    public PageResult<OrderStatus> getMyOrderTrend(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
-            @ApiParam(name = "page", value = "页码")
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @ApiParam(name = "pageNum", value = "页码")
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
-
-        return jsonResult.success(centerOrderService.getMyOrderTrend(userId, page, pageSize));
+        startPage();
+        List<OrderStatus> myOrderTrend = centerOrderService.getMyOrderTrend(userId);
+        return PageResult.setPageResult(myOrderTrend, pageNum);
     }
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8080
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -24,4 +24,7 @@ mybatis:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
-
+  # 分页插件配置
+pagehelper:
+  support-methods-arguments: true
+  helper-dialect: mysql

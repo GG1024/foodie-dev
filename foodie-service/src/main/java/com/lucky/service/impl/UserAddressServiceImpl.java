@@ -6,17 +6,17 @@
 package com.lucky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lucky.bo.AddressBo;
 import com.lucky.enums.YesOrNo;
-import com.lucky.pojo.UserAddress;
 import com.lucky.mapper.UserAddressMapper;
+import com.lucky.pojo.UserAddress;
 import com.lucky.service.UserAddressService;
 import lombok.extern.slf4j.Slf4j;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,5 +102,15 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         where.lambda().eq(UserAddress::getId, addressId);
         where.lambda().eq(UserAddress::getUserId, userId);
         baseMapper.delete(where);
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public UserAddress queryUserAddress(String addressId, String userId) {
+        QueryWrapper<UserAddress> where = new QueryWrapper<>();
+        where.lambda().eq(UserAddress::getId, addressId);
+        where.lambda().eq(UserAddress::getUserId, userId);
+        return baseMapper.selectOne(where);
     }
 }

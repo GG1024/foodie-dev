@@ -23,5 +23,10 @@ public interface OrdersService extends IService<Orders> {
 
     OrderVo createOrder(SubmitOrderBo submitOrderBo, List<ShopcartBo> shopcartBoList);
 
-    void updateOrderStatus(String merchantOrderId, Integer type);
+    void updateOrderStatus(String orderId, Integer orderStatus);
+
+    void closeOrders();
+
+   void closeOrdersByOrderId(String orderId);
+
 }

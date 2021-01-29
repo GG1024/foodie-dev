@@ -9,11 +9,15 @@ import lombok.Data;
  */
 @Data
 public class SubmitOrderBo {
-
+    //用户ID
     private String userId;
+    //商品规格ID
     private String itemSpecIds;
+    //收货地址ID
     private String addressId;
+    //支付方式
     private Integer payMethod;
+
     private String leftMsg;
 
 

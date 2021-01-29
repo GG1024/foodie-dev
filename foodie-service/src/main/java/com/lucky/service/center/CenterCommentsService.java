@@ -2,6 +2,7 @@ package com.lucky.service.center;
 
 import com.lucky.bo.OrderItemsCommentBO;
 import com.lucky.pojo.OrderItems;
+import com.lucky.vo.MyCommentVO;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface CenterCommentsService {
 
     void saveComments(String userId, String orderId, List<OrderItemsCommentBO> orderItemList);
 
-    String queryMyComments(String userId, Integer page, Integer pageSize);
+    List<MyCommentVO> queryMyComments(String userId);
 
 }

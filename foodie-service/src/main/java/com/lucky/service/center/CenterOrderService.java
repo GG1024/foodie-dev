@@ -1,6 +1,11 @@
 package com.lucky.service.center;
 
+import com.lucky.pojo.OrderStatus;
 import com.lucky.pojo.Orders;
+import com.lucky.vo.MyOrdersVO;
+import com.lucky.vo.OrderStatusCountsVO;
+
+import java.util.List;
 
 /**
  * @FileName: CenterOrderService.java
@@ -11,7 +16,7 @@ import com.lucky.pojo.Orders;
 public interface CenterOrderService {
     Orders checkOrders(String orderId, String userId);
 
-    String queryMyOrders(String userId, Integer orderStatus, Integer page, Integer pageSize);
+    List<MyOrdersVO> queryMyOrders(String userId, Integer orderStatus);
 
 
     void deliverItem(String orderId);
@@ -20,7 +25,7 @@ public interface CenterOrderService {
 
     boolean deleteOrder(String orderId, String userId);
 
-    String getMyOrderStatusCounts(String userId);
+    OrderStatusCountsVO getMyOrderStatusCounts(String userId);
 
-    String getMyOrderTrend(String userId, Integer page, Integer pageSize);
+    List<OrderStatus> getMyOrderTrend(String userId);
 }

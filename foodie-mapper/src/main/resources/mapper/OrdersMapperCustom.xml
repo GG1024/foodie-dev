@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lucky.mapper.OrdersMapperCustom">
+
+	
+	<resultMap id="myOrdersVoResultMap" type="com.lucky.vo.MyOrdersVO">
+		<id column="orderId" property="orderId"/>
+		<id column="itemId" property="itemId" jdbcType="VARCHAR"/>
+		<result column="itemImg" property="itemImg" jdbcType="VARCHAR"/>
+		<result column="itemName" property="itemName" jdbcType="VARCHAR"/>
+		<result column="itemSpecName" property="itemSpecName" jdbcType="VARCHAR"/>
+		<result column="buyCounts" property="buyCounts" jdbcType="INTEGER"/>
+		<result column="price" property="price" jdbcType="INTEGER"/>
+		<collection property="subOrderItemList" column="orderId" ofType="com.lucky.vo.MySubOrderItemVO"
+					select="queryOrderItem"
+		/>
+	</resultMap>
+	
+	<select id="queryMyOrders" parameterType="map" resultMap="myOrdersVoResultMap">
+		SELECT
+		o.id orderId,
+		o.pay_method payMethod,
+		o.created_time createdTime,
+		o.real_pay_amount realPayAmount,
+		o.post_amount postAmount,
+		o.is_comment isComment,
+		os.order_status orderStatus
+		FROM
+		orders o
+		LEFT JOIN
+		order_status os
+		on
+		o.id = os.order_id
+		WHERE
+		o.user_id = #{map.userId}
+		AND
+		o.is_delete = 0
+		<if test="map.orderStatus!=null">
+			AND os.order_status = #{map.orderStatus}
+		</if>
+		ORDER BY
+		o.update_time DESC
+	</select>
+
+	<select id="queryOrderItem" parameterType="string" resultType="com.lucky.vo.MySubOrderItemVO">
+		select
+        item_id itemId,
+        item_img itemImg,
+        item_name itemName,
+        item_spec_name itemSpecName,
+        buy_counts buyCounts,
+        price price
+        from
+        order_items
+        where
+        order_id = #{orderId}
+	</select>
+
+
+	<select id="getMyOrderTrend" parameterType="string" resultType="com.lucky.pojo.OrderStatus">
+		SELECT
+            os.order_id as orderId,
+            os.order_status as orderStatus,
+            os.created_time as createdTime,
+            os.pay_time as payTime,
+            os.deliver_time as deliverTime,
+            os.success_time as successTime,
+            os.close_time as closeTime,
+            os.comment_time as commentTime
+        FROM
+          orders o
+        LEFT JOIN
+          order_status os
+        on
+          o.id = os.order_id
+        WHERE
+          o.is_delete = 0
+        AND
+          o.user_id = #{userId}
+        AND
+          os.order_status in (20, 30, 40)
+        ORDER BY
+          os.order_id
+        DESC
+	</select>
+
+	<select id="getMyOrderStatusCounts" parameterType="map" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		orders o
+		LEFT JOIN
+		order_status os
+		on
+		o.id = os.order_id
+		WHERE
+		o.user_id = #{map.userId}
+		AND
+		os.order_status = #{map.orderStatus}
+		<if test="map.isComment != null">
+			and o.is_comment = #{map.isComment}
+		</if>
+	</select>
+</mapper>

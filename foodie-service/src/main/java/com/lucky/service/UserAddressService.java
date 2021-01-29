@@ -29,4 +29,7 @@ public interface UserAddressService extends IService<UserAddress> {
     void updateUserAddressToBeDefault(String userId, String addressId);
 
     void deleteAddress(String userId, String addressId);
+
+    UserAddress queryUserAddress(String addressId,String userId);
+
 }

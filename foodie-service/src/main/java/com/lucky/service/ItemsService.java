@@ -1,8 +1,7 @@
 /**
  * @filename:ItemsService 2019年10月16日
- * @project   
- * Copyright(c) 2020 欧阳小广 Co. Ltd. 
- * All right reserved. 
+ * @project Copyright(c) 2020 欧阳小广 Co. Ltd.
+ * All right reserved.
  */
 package com.lucky.service;
 
@@ -13,15 +12,16 @@ import com.lucky.pojo.ItemsImg;
 import com.lucky.pojo.ItemsParam;
 import com.lucky.pojo.ItemsSpec;
 import com.lucky.vo.CountsVo;
+import com.lucky.vo.ItemsCommentsVo;
+import com.lucky.vo.SearchItemsVo;
 import com.lucky.vo.ShopcartVo;
 
 import java.util.List;
 
-/**   
+/**
  * @Description:TODO(商品表服务层)
- * @version: 
+ * @version:
  * @author: 欧阳小广
- * 
  */
 public interface ItemsService extends IService<Items> {
 
@@ -35,11 +35,20 @@ public interface ItemsService extends IService<Items> {
 
     CountsVo queryItemsCommentCount(String itemId);
 
-    IPage queryItemsComment(String itemId, Integer level, Integer page, Integer pageSize);
+    List<ItemsCommentsVo> queryItemsComment(String itemId, Integer level);
 
-    IPage searchItems(String keywords, String sort, Integer page, Integer pageSize);
+    List<SearchItemsVo> searchItems(String keywords, String sort);
 
-    IPage searchItemsByThirdCat(String catId, String sort, Integer page, Integer pageSize);
+    List<SearchItemsVo> searchItemsByThirdCat(String catId, String sort);
 
     List<ShopcartVo> refreshShopCartWithSpeIds(String itemSpecIds);
+
+    ItemsSpec queryItemSpecById(String specId);
+
+
+    ItemsImg queryItemMainImg(String itemId);
+
+
+    void decreaseItemSpecStock(String itemSpecId, int buyCount);
+
 }

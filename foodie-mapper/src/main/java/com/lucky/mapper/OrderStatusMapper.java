@@ -18,6 +18,6 @@ import com.lucky.pojo.OrderStatus;
  * 
  */
 @Mapper
-public interface OrderStatusDao extends BaseMapper<OrderStatus> {
+public interface OrderStatusMapper extends BaseMapper<OrderStatus> {
 	
 }

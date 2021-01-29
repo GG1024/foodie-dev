@@ -12,7 +12,7 @@ import com.lucky.pojo.Users;
 public interface CenterUserService {
 
 
-    String queryUserInfoById(String userId);
+    Users queryUserInfoById(String userId);
 
     Users updateUserInfo(String userId, CenterUserBo centerUserBo);
 

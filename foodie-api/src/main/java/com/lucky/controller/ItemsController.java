@@ -5,13 +5,17 @@
  */
 package com.lucky.controller;
 
+import com.lucky.core.AbstractController;
 import com.lucky.core.JsonResult;
 import com.lucky.pojo.Items;
 import com.lucky.pojo.ItemsImg;
 import com.lucky.pojo.ItemsParam;
 import com.lucky.pojo.ItemsSpec;
 import com.lucky.service.ItemsService;
+import com.lucky.utils.PageResult;
 import com.lucky.vo.ItemInfoVo;
+import com.lucky.vo.ItemsCommentsVo;
+import com.lucky.vo.SearchItemsVo;
 import com.lucky.vo.ShopcartVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +38,7 @@ import java.util.List;
 @Api(description = "商品", value = "用于商品的相关接口")
 @RestController
 @RequestMapping("/items")
-public class ItemsController {
+public class ItemsController extends AbstractController {
     @Autowired
     private ItemsService itemsService;
 
@@ -71,42 +75,48 @@ public class ItemsController {
 
     @ApiOperation(value = "商品评价列表", notes = "商品评价列表", httpMethod = "GET")
     @GetMapping("/comments")
-    public JsonResult commentList(@RequestParam String itemId,
-                                  @RequestParam(value = "level", required = false) Integer level,
-                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+    public PageResult<ItemsCommentsVo> commentList(@RequestParam String itemId,
+                                                   @RequestParam(value = "level", required = false) Integer level,
+                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         if (StringUtils.isBlank(itemId)) {
-            return jsonResult.error("商品id不能为空!");
+            throw new RuntimeException("商品id不能为空!");
         }
-        return jsonResult.success(itemsService.queryItemsComment(itemId, level, page, pageSize));
+        startPage();
+        List<ItemsCommentsVo> itemsCommentsVos = itemsService.queryItemsComment(itemId, level);
+        return PageResult.setPageResult(itemsCommentsVos, pageNum);
     }
 
     @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表", httpMethod = "GET")
     @GetMapping("/search")
-    public JsonResult searchItems(
+    public PageResult<SearchItemsVo> searchItems(
             @ApiParam(name = "sort", value = "排序规则", required = true)
             @RequestParam(value = "sort") String sort,
             @ApiParam(name = "keywords", value = "排序规则")
             @RequestParam(value = "keywords") String keywords,
-            @ApiParam(name = "page", value = "页码")
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @ApiParam(name = "pageNum", value = "页码")
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
-        return jsonResult.success(itemsService.searchItems(keywords, sort, page, pageSize));
+        startPage();
+        List<SearchItemsVo> searchItemsVos = itemsService.searchItems(keywords, sort);
+        return PageResult.setPageResult(searchItemsVos, pageNum);
     }
 
     @ApiOperation(value = "商品三级分类id搜索商品列表", notes = "商品三级分类id搜索商品列表", httpMethod = "GET")
     @GetMapping("/catItems")
-    public JsonResult searchItemsByThirdCat(
+    public PageResult<SearchItemsVo> searchItemsByThirdCat(
             @ApiParam(name = "sort", value = "排序规则", required = true)
             @RequestParam(value = "sort") String sort,
             @ApiParam(name = "catId", value = "三级商品id")
             @RequestParam(value = "catId") String catId,
-            @ApiParam(name = "page", value = "页码")
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @ApiParam(name = "pageNum", value = "页码")
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
-        return jsonResult.success(itemsService.searchItemsByThirdCat(catId, sort, page, pageSize));
+        startPage();
+        List<SearchItemsVo> searchItemsVos = itemsService.searchItemsByThirdCat(catId, sort);
+        return PageResult.setPageResult(searchItemsVos, pageNum);
     }
 
 
