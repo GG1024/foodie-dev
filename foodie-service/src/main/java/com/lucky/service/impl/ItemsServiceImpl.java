@@ -6,8 +6,6 @@
 package com.lucky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lucky.enums.Level;
 import com.lucky.mapper.*;
 import com.lucky.pojo.*;

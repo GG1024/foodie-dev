@@ -1,4 +1,4 @@
-package com.lucky.config;
+package com.lucky.core.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

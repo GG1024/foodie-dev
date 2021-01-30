@@ -21,7 +21,6 @@ import com.lucky.utils.DateUtil;
 import com.lucky.vo.MerchantOrdersVo;
 import com.lucky.vo.OrderVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

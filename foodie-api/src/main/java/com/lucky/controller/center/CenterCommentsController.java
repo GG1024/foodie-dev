@@ -37,11 +37,10 @@ public class CenterCommentsController extends AbstractController {
     @Autowired
     private CenterOrderService centerOrderService;
 
-    private JsonResult jsonResult = new JsonResult();
 
     @ApiOperation(value = "根据订单id查询待评价商品", notes = "根据订单id查询待评价商品", httpMethod = "POST")
     @PostMapping("/pending")
-    public JsonResult<OrderItems> searchItems(
+    public JsonResult<List<OrderItems>> searchItems(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
             @ApiParam(name = "orderId", value = "订单id", required = true)
@@ -49,11 +48,11 @@ public class CenterCommentsController extends AbstractController {
     ) {
         Orders orders = centerOrderService.checkOrders(orderId, userId);
         if (orders == null) {
-            return jsonResult.error("订单id和用户id不匹配！");
+            return JsonResult.error("订单id和用户id不匹配！");
         }
 
         List<OrderItems> orderItems = centerCommentsService.queryPendingComments(orderId);
-        return jsonResult.success(orderItems);
+        return JsonResult.success(orderItems);
     }
 
 
@@ -68,11 +67,11 @@ public class CenterCommentsController extends AbstractController {
             @RequestBody List<OrderItemsCommentBO> orderItemList
     ) {
         if (orderItemList == null || orderItemList.isEmpty()) {
-            return jsonResult.error("评论不能为空!");
+            return JsonResult.error("评论不能为空!");
         }
 
         centerCommentsService.saveComments(userId, orderId, orderItemList);
-        return jsonResult.success();
+        return JsonResult.success();
     }
 
 

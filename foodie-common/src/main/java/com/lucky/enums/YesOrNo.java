@@ -1,10 +1,13 @@
 package com.lucky.enums;
 
+import lombok.Getter;
+
 /**
  * @author lank
  * @date 2020/1/15 22:37
  * @desc
  */
+@Getter
 public enum YesOrNo {
     YES(1,"yes"),
     NO(0,"no");

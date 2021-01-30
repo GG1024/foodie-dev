@@ -1,5 +1,8 @@
 package com.lucky.core;
 
+import com.lucky.enums.ResponseEnum;
+import org.springframework.http.HttpStatus;
+
 import java.io.Serializable;
 import java.net.ConnectException;
 import java.sql.SQLException;
@@ -13,68 +16,43 @@ import java.sql.SQLException;
 public class JsonResult<T> implements Serializable {
     private static final long serialVersionUID = 1071681926787951549L;
     private Integer code;
-    private String operate;
     private String message;
     private T data;
 
-    public JsonResult<T> success(String message, T data) {
-        this.setCode(200);
-        this.setOperate("success");
-        this.setMessage(message);
-        this.setData(data);
-        return this;
+    public static <T> JsonResult<T> success(String message, T data) {
+        return new JsonResult(HttpStatus.OK.value(), message, data);
     }
 
-    public JsonResult<T> success(T data) {
-        this.setCode(200);
-        this.setOperate("success");
-        this.setMessage("操作成功");
-        this.setData(data);
-        return this;
+    public static <T> JsonResult<T> success(T data) {
+        return new JsonResult(HttpStatus.OK.value(), ResponseEnum.SUCCESS.desc, data);
     }
 
-    public JsonResult<T> success() {
-        this.setCode(200);
-        this.setOperate("success");
-        this.setMessage("操作成功");
-        this.setData(null);
-        return this;
+    public static <T> JsonResult<T> success() {
+        return new JsonResult(HttpStatus.OK.value(), ResponseEnum.SUCCESS.desc, null);
     }
 
-    public JsonResult<T> success(String message) {
-        this.setCode(200);
-        this.setOperate("success");
-        this.setMessage(message);
-        this.setData(null);
-        return this;
+    public static <T> JsonResult<T> success(String message) {
+        return new JsonResult(HttpStatus.OK.value(), message, null);
     }
 
-    public JsonResult<T> error(String message) {
-        this.setCode(500);
-        this.setOperate("failed");
-        this.setMessage(message);
-        this.setData(null);
-        return this;
+    public static <T> JsonResult<T> error(String message) {
+        return new JsonResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, null);
     }
 
-    public JsonResult<T> error(T data) {
-        this.setCode(500);
-        this.setOperate("failed");
-        this.setMessage("操作失败");
-        this.setData(data);
-        return this;
+    public static <T> JsonResult<T> error(T data) {
+        return new JsonResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), ResponseEnum.FAILED.desc, data);
     }
 
-    public JsonResult<T> error(String message, T data) {
-        this.setCode(500);
-        this.setOperate("failed");
-        this.setMessage(message);
-        this.setData(data);
-        return this;
+    public static <T> JsonResult<T> error(String message, T data) {
+        return new JsonResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, data);
     }
+
+    public static <T> JsonResult<T> error(Integer code, String message) {
+        return new JsonResult(code, message, null);
+    }
+
 
     public JsonResult(Throwable throwable) {
-        this.operate = "failed";
         if (throwable instanceof NullPointerException) {
             this.code = 1001;
             this.message = "空指针：" + throwable;
@@ -116,9 +94,6 @@ public class JsonResult<T> implements Serializable {
         return this.code;
     }
 
-    public String getOperate() {
-        return this.operate;
-    }
 
     public String getMessage() {
         return this.message;
@@ -132,9 +107,6 @@ public class JsonResult<T> implements Serializable {
         this.code = code;
     }
 
-    public void setOperate(String operate) {
-        this.operate = operate;
-    }
 
     public void setMessage(String message) {
         this.message = message;
@@ -167,16 +139,6 @@ public class JsonResult<T> implements Serializable {
                         break label59;
                     }
 
-                    return false;
-                }
-
-                Object this$operate = this.getOperate();
-                Object other$operate = other.getOperate();
-                if (this$operate == null) {
-                    if (other$operate != null) {
-                        return false;
-                    }
-                } else if (!this$operate.equals(other$operate)) {
                     return false;
                 }
 
@@ -215,8 +177,6 @@ public class JsonResult<T> implements Serializable {
         int result = 1;
         Object $code = this.getCode();
         result = result * 59 + ($code == null ? 43 : $code.hashCode());
-        Object $operate = this.getOperate();
-        result = result * 59 + ($operate == null ? 43 : $operate.hashCode());
         Object $message = this.getMessage();
         result = result * 59 + ($message == null ? 43 : $message.hashCode());
         Object $data = this.getData();
@@ -226,15 +186,14 @@ public class JsonResult<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "JsonResult(code=" + this.getCode() + ", operate=" + this.getOperate() + ", message=" + this.getMessage() + ", data=" + this.getData() + ")";
+        return "JsonResult(code=" + this.getCode() + ", message=" + this.getMessage() + ", data=" + this.getData() + ")";
     }
 
     public JsonResult() {
     }
 
-    public JsonResult(Integer code, String operate, String message, T data) {
+    public JsonResult(Integer code, String message, T data) {
         this.code = code;
-        this.operate = operate;
         this.message = message;
         this.data = data;
     }

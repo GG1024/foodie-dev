@@ -42,14 +42,11 @@ public class ItemsController extends AbstractController {
     @Autowired
     private ItemsService itemsService;
 
-    private JsonResult jsonResult = new JsonResult();
-
-
     @ApiOperation(value = "商品详情页", notes = "商品详情页", httpMethod = "GET")
     @GetMapping("/info/{itemId}")
     public JsonResult<ItemInfoVo> queryCarousel(@PathVariable String itemId) {
         if (StringUtils.isBlank(itemId)) {
-            return jsonResult.error("商品id不能为空!");
+            return JsonResult.error("商品id不能为空!");
         }
         Items items = itemsService.queryItemById(itemId);
         List<ItemsImg> itemsImg = itemsService.queryItemsImgById(itemId);
@@ -60,7 +57,7 @@ public class ItemsController extends AbstractController {
         itemInfoVo.setItemImgList(itemsImg);
         itemInfoVo.setItemParams(itemsParam);
         itemInfoVo.setItemSpecList(itemsSpec);
-        return jsonResult.success(itemInfoVo);
+        return JsonResult.success(itemInfoVo);
     }
 
 
@@ -68,9 +65,9 @@ public class ItemsController extends AbstractController {
     @GetMapping("/commentLevel")
     public JsonResult commentLevel(@RequestParam String itemId) {
         if (StringUtils.isBlank(itemId)) {
-            return jsonResult.error("商品id不能为空!");
+            return JsonResult.error("商品id不能为空!");
         }
-        return jsonResult.success(itemsService.queryItemsCommentCount(itemId));
+        return JsonResult.success(itemsService.queryItemsCommentCount(itemId));
     }
 
     @ApiOperation(value = "商品评价列表", notes = "商品评价列表", httpMethod = "GET")
@@ -123,13 +120,13 @@ public class ItemsController extends AbstractController {
     // 用于用户长时间未登录网站，刷新购物车中的数据（主要是商品价格），类似京东淘宝
     @ApiOperation(value = "根据商品规格ids查找最新的商品数据", notes = "根据商品规格ids查找最新的商品数据", httpMethod = "GET")
     @GetMapping("/refresh")
-    public JsonResult<ShopcartVo> refresh(
+    public JsonResult<List<ShopcartVo>> refresh(
             @ApiParam(name = "itemSpecIds", value = "拼接的规格ids", required = true, example = "1001,1003,1005")
             @RequestParam String itemSpecIds) {
         if (StringUtils.isBlank(itemSpecIds)) {
-            return jsonResult.success();
+            return JsonResult.success();
         }
         List<ShopcartVo> list = itemsService.refreshShopCartWithSpeIds(itemSpecIds);
-        return jsonResult.success(list);
+        return JsonResult.success(list);
     }
 }

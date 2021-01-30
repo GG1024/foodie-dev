@@ -42,11 +42,10 @@ public class IndexController {
     @Autowired
     private RedisUtil redisUtil;
 
-    private JsonResult jsonResult = new JsonResult();
 
     @ApiOperation(value = "首页轮播图", notes = "首页轮播图", httpMethod = "GET")
     @GetMapping("/carousel")
-    public JsonResult<Carousel> queryCarousel() {
+    public JsonResult<List<Carousel>> queryCarousel() {
         //提交轮播图信息到redis缓存
         String carouselStr = redisUtil.get("carousel");
         List<Carousel> list = null;
@@ -56,12 +55,12 @@ public class IndexController {
         } else {
             list = JsonUtils.jsonToList(carouselStr, Carousel.class);
         }
-        return jsonResult.success(list);
+        return JsonResult.success(list);
     }
 
     @ApiOperation(value = "获取商品分类（一级分类）", notes = "获取商品分类（一级分类）", httpMethod = "GET")
     @GetMapping("/cats")
-    public JsonResult<Category> queryCats() {
+    public JsonResult<List<Category>> queryCats() {
         String cats = redisUtil.get("cats");
         List<Category> categories = null;
         if (StringUtils.isBlank(cats)) {
@@ -70,16 +69,16 @@ public class IndexController {
         } else {
             categories = JsonUtils.jsonToList(cats, Category.class);
         }
-        return jsonResult.success(categories);
+        return JsonResult.success(categories);
     }
 
     @ApiOperation(value = "获取商品子分类", notes = "获取商品子分类", httpMethod = "GET")
     @GetMapping("/subCat/{rootCatId}")
-    public JsonResult<CategoryVo> querySubCats(
+    public JsonResult<List<CategoryVo>> querySubCats(
             @ApiParam(value = "一级分类id", name = "rootCatId")
             @PathVariable Integer rootCatId) {
         if (rootCatId == null) {
-            return jsonResult.error("一级分类id不能为空");
+            return JsonResult.error("一级分类id不能为空");
         }
 
         List<CategoryVo> categoryVos = null;
@@ -90,7 +89,7 @@ public class IndexController {
         } else {
             categoryVos = JsonUtils.jsonToList(catsStr, CategoryVo.class);
         }
-        return jsonResult.success(categoryVos);
+        return JsonResult.success(categoryVos);
     }
 
     @ApiOperation(value = "获取首页分类推荐商品", notes = "获取首页分类推荐商品", httpMethod = "GET")
@@ -99,9 +98,9 @@ public class IndexController {
             @ApiParam(value = "一级分类id", name = "rootCatId")
             @PathVariable Integer rootCatId) {
         if (rootCatId == null) {
-            return jsonResult.error("一级分类id不能为空");
+            return JsonResult.error("一级分类id不能为空");
         }
 
-        return jsonResult.success(categoryService.getSixNewItemsList(rootCatId));
+        return JsonResult.success(categoryService.getSixNewItemsList(rootCatId));
     }
 }
