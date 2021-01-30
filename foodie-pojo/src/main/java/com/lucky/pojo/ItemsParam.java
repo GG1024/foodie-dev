@@ -32,7 +32,6 @@ public class ItemsParam extends Model<ItemsParam> {
 
 	private static final long serialVersionUID = 1610950408421L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "")
 	private String id;
     
@@ -69,12 +68,12 @@ public class ItemsParam extends Model<ItemsParam> {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "createTime" , value = "")
-	private Date createTime;
+	private Date createdTime;
     
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "updateTime" , value = "")
-	private Date updateTime;
+	private Date updatedTime;
     
 
 	@Override

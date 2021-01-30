@@ -31,7 +31,6 @@ public class Carousel extends Model<Carousel> {
 
 	private static final long serialVersionUID = 1610941929486L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "主键ID")
 	private String id;
     
@@ -45,7 +44,7 @@ public class Carousel extends Model<Carousel> {
 	private String itemId;
     
 	@ApiModelProperty(name = "catId" , value = "商品分类id")
-	private Long catId;
+	private String catId;
     
 	@ApiModelProperty(name = "type" , value = "轮播图类型，用于判断，可以根据商品id或者分类进行页面跳转，1：商品 2：分类")
 	private String type;

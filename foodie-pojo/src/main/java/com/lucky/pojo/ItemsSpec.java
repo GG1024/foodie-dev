@@ -32,7 +32,6 @@ public class ItemsSpec extends Model<ItemsSpec> {
 
 	private static final long serialVersionUID = 1610950420684L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "")
 	private String id;
     
@@ -46,7 +45,7 @@ public class ItemsSpec extends Model<ItemsSpec> {
 	private Integer stock;
     
 	@ApiModelProperty(name = "discounts" , value = "折扣力度")
-	private Integer discounts;
+	private BigDecimal discounts;
     
 	@ApiModelProperty(name = "priceDiscount" , value = "优惠价")
 	private BigDecimal priceDiscount;
@@ -57,12 +56,12 @@ public class ItemsSpec extends Model<ItemsSpec> {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "createTime" , value = "")
-	private Date createTime;
+	private Date createdTime;
     
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "updateTime" , value = "")
-	private Date updateTime;
+	private Date updatedTime;
     
 
 	@Override

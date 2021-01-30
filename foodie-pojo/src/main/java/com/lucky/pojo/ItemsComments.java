@@ -31,13 +31,16 @@ public class ItemsComments extends Model<ItemsComments> {
 
 	private static final long serialVersionUID = 1610950371588L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "")
 	private String id;
     
 	@ApiModelProperty(name = "userId" , value = "用户id")
 	private String userId;
-    
+
+	private String userFakeNickname;
+
+	private String userFace;
+
 	@ApiModelProperty(name = "itemId" , value = "商品id")
 	private String itemId;
     
@@ -59,12 +62,12 @@ public class ItemsComments extends Model<ItemsComments> {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "createTime" , value = "")
-	private Date createTime;
+	private Date createdTime;
     
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "update" , value = "")
-	private Date update;
+	private Date updatedTime;
     
 
 	@Override
