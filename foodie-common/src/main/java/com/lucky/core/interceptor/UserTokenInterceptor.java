@@ -1,4 +1,4 @@
-package com.lucky.interceptor;
+package com.lucky.core.interceptor;
 
 import com.lucky.core.JsonResult;
 import com.lucky.utils.JsonUtils;
@@ -29,9 +29,6 @@ public class UserTokenInterceptor implements HandlerInterceptor {
     public static final String REDIS_USER_TOKEN = "redis_user_token";
     private static Logger logger = LoggerFactory.getLogger(UserTokenInterceptor.class);
 
-
-    private JsonResult jsonResult = new JsonResult();
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -42,16 +39,16 @@ public class UserTokenInterceptor implements HandlerInterceptor {
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userToken)) {
             String uniqueToken = redisUtil.get(REDIS_USER_TOKEN + ":" + userId);
             if (StringUtils.isBlank(uniqueToken)) {
-                returnErrorResponse(response, jsonResult.error("请登录"));
+                returnErrorResponse(response, JsonResult.error("请登录"));
                 return false;
             } else {
                 if (!userToken.equals(uniqueToken)) {
-                    returnErrorResponse(response, jsonResult.error("该账号异地登陆，请重登！"));
+                    returnErrorResponse(response, JsonResult.error("该账号异地登陆，请重登！"));
                     return false;
                 }
             }
         } else {
-            returnErrorResponse(response, jsonResult.error("请登录"));
+            returnErrorResponse(response, JsonResult.error("请登录"));
             return false;
         }
         return false;

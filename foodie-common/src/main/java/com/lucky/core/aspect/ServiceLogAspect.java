@@ -1,4 +1,4 @@
-package com.lucky.aspect;
+package com.lucky.core.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
