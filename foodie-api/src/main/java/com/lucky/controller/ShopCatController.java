@@ -31,7 +31,6 @@ public class ShopCatController extends BaseController {
     @Autowired
     private RedisUtil redisUtil;
 
-    private JsonResult jsonResult = new JsonResult();
 
     @ApiOperation(value = "添加购物车商品到redis", notes = "添加购物车商品到redis", httpMethod = "POST")
     @PostMapping("/add")
@@ -40,7 +39,7 @@ public class ShopCatController extends BaseController {
                           HttpServletRequest request, HttpServletResponse response
     ) {
         if (StringUtils.isBlank(userId)) {
-            return jsonResult.error("");
+            return JsonResult.error("");
         }
         log.info(shopcartBo.toString());
         //前端用户在登录得情况下，用户添加购物车会同步到redis缓存
@@ -66,7 +65,7 @@ public class ShopCatController extends BaseController {
             shopcartBoList.add(shopcartBo);
         }
         redisUtil.set(FOODIE_SHOPCART + ":" + userId, JsonUtils.objectToJson(shopcartBoList));
-        return jsonResult.success();
+        return JsonResult.success();
     }
 
 
@@ -77,7 +76,7 @@ public class ShopCatController extends BaseController {
                           HttpServletRequest request, HttpServletResponse response
     ) {
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(itemSpecId)) {
-            return jsonResult.error("参数不能为空!");
+            return JsonResult.error("参数不能为空!");
         }
 
         log.info("用户删除购物车中商品" + itemSpecId);
@@ -95,7 +94,7 @@ public class ShopCatController extends BaseController {
             log.info("shopcartBoList:{}", JsonUtils.objectToJson(shopcartBoList));
             redisUtil.set(FOODIE_SHOPCART + ":" + userId, JsonUtils.objectToJson(shopcartBoList));
         }
-        return jsonResult.success();
+        return JsonResult.success();
     }
 
 }

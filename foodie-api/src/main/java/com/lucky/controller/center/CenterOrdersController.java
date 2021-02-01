@@ -32,23 +32,22 @@ public class CenterOrdersController extends AbstractController {
     @Autowired
     private CenterOrderService centerOrderService;
 
-    private JsonResult jsonResult = new JsonResult();
 
     @ApiOperation(value = "查询用户订单", notes = "查询用户订单", httpMethod = "GET")
     @PostMapping("/query")
-    public PageResult<MyOrdersVO> searchItems(
+    public JsonResult<PageResult<MyOrdersVO>> searchItems(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
             @ApiParam(name = "orderStatus", value = "orderStatus")
             @RequestParam(value = "orderStatus") Integer orderStatus,
-            @ApiParam(name = "pageNum", value = "页码")
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+            @ApiParam(name = "page", value = "页码")
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
     ) {
         startPage();
         List<MyOrdersVO> ordersVOList = centerOrderService.queryMyOrders(userId, orderStatus);
-        return PageResult.setPageResult(ordersVOList, pageNum);
+        return JsonResult.success(PageResult.setPageResult(ordersVOList, page));
     }
 
 
@@ -59,7 +58,7 @@ public class CenterOrdersController extends AbstractController {
             @RequestParam(value = "orderId") String orderId) {
 
         centerOrderService.deliverItem(orderId);
-        return jsonResult.success();
+        return JsonResult.success();
 
     }
 
@@ -78,9 +77,9 @@ public class CenterOrdersController extends AbstractController {
         }
         boolean b = centerOrderService.confirmReceive(orderId);
         if (!b) {
-            return jsonResult.error("操作失败!");
+            return JsonResult.error("操作失败!");
         }
-        return jsonResult.success("操作成功!");
+        return JsonResult.success("操作成功!");
     }
 
     @ApiOperation(value = "逻辑删除订单", notes = "逻辑删除订单接口", httpMethod = "POST")
@@ -97,9 +96,9 @@ public class CenterOrdersController extends AbstractController {
         }
         boolean deleteOrder = centerOrderService.deleteOrder(orderId, userId);
         if (!deleteOrder) {
-            return jsonResult.error("操作失败!");
+            return JsonResult.error("操作失败!");
         }
-        return jsonResult.success("删除成功!");
+        return JsonResult.success("删除成功!");
     }
 
     @ApiOperation(value = "查询用户id与订单id是否匹配", notes = "查询用户id与订单id是否匹配", httpMethod = "GET")
@@ -111,9 +110,9 @@ public class CenterOrdersController extends AbstractController {
             @RequestParam(value = "userId") String userId) {
         Orders orders = centerOrderService.checkOrders(orderId, userId);
         if (orders == null) {
-            return jsonResult.error("订单不匹配!");
+            return JsonResult.error("订单不匹配!");
         }
-        return jsonResult.success();
+        return JsonResult.success();
 
     }
 
@@ -122,21 +121,21 @@ public class CenterOrdersController extends AbstractController {
     public JsonResult statusCounts(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId) {
-        return jsonResult.success(centerOrderService.getMyOrderStatusCounts(userId));
+        return JsonResult.success(centerOrderService.getMyOrderStatusCounts(userId));
     }
 
 
     @ApiOperation(value = "查询用户订单", notes = "查询用户订单", httpMethod = "GET")
     @PostMapping("/trend")
-    public PageResult<OrderStatus> getMyOrderTrend(
+    public JsonResult<PageResult<OrderStatus>> getMyOrderTrend(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
-            @ApiParam(name = "pageNum", value = "页码")
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+            @ApiParam(name = "page", value = "页码")
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         startPage();
         List<OrderStatus> myOrderTrend = centerOrderService.getMyOrderTrend(userId);
-        return PageResult.setPageResult(myOrderTrend, pageNum);
+        return JsonResult.success(PageResult.setPageResult(myOrderTrend, page));
     }
 }

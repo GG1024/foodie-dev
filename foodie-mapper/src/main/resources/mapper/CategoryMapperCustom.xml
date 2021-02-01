@@ -3,16 +3,90 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lucky.mapper.CategoryMapperCustom">
+    <resultMap id="BaseResultMap" type="com.lucky.vo.CategoryVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="father_id" property="fatherId" jdbcType="INTEGER"/>
+
+        <!--
+        collection 用于定义list集合类型的封装规则
+        ofType 集合的类型
+        -->
+        <collection property="subCatList" ofType="com.lucky.vo.SubCategoryVo">
+            <id column="subId" property="subId" jdbcType="INTEGER"/>
+            <result column="subName" property="subName" jdbcType="VARCHAR"/>
+            <result column="subType" property="subType" jdbcType="INTEGER"/>
+            <result column="subFatherId" property="subFatherId" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
 
 
+    <resultMap id="mySixItemMap" type="com.lucky.vo.NewItemsVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="rootCatId" property="rootCatId" jdbcType="INTEGER"/>
+        <result column="rootCatName" property="rootCatName" jdbcType="VARCHAR"/>
+        <result column="bgColor" property="bgColor" jdbcType="VARCHAR"/>
+        <result column="slogan" property="slogan" jdbcType="VARCHAR"/>
+        <result column="catImage" property="catImage" jdbcType="VARCHAR"/>
+        <!--
+        collection 用于定义list集合类型的封装规则
+        ofType 集合的类型
+        -->
+        <collection property="simpleItemList" ofType="com.lucky.vo.SimpleItemVo">
+            <id column="itemId" property="itemId" jdbcType="VARCHAR"/>
+            <result column="itemName" property="itemName" jdbcType="VARCHAR"/>
+            <result column="itemUrl" property="itemUrl" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
 
-    <select id="getSubCatList">
+    <select id="getSubCatList" parameterType="int" resultMap="BaseResultMap">
+        select
+        f.id id,
+        f.`name` name,
+        f.type type,
+        f.father_id fatherId,
+        c.id subId,
+        c.`name` subName,
+        c.type subType,
+        c.father_id subFatherId
+        from category f LEFT JOIN category c on
+        f.id = c.father_id
+        WHERE f.father_id
+        = #{rootCatId}
+  </select>
+
+
+    <select id="getSixNewItemList" resultMap="mySixItemMap" parameterType="int">
+
+    select
+        f.id rootCatId,
+        f.`name` rootCatName,
+        f.bg_color bgColor,
+        f.slogan slogan,
+        f.cat_image catImage,
+        i.id itemId,
+        i.item_name itemName,
+        ii.url itemUrl,
+        i.created_time createdTime
+        from
+        category f
+        LEFT JOIN
+        items i
+        ON f.id = i.root_cat_id
+        LEFT JOIN
+        items_img ii
+        ON i.id = ii.item_id
+        WHERE f.type =1
+        AND i.root_cat_id = #{rootCatId}
+        AND ii.is_main = 1
+        ORDER BY i.created_time DESC
+        LIMIT 0,6
 
     </select>
-
-
-    <select id="getSixNewItemList">
-
-    </select>
-
 </mapper>

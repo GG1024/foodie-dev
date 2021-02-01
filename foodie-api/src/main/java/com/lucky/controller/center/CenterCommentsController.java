@@ -77,15 +77,15 @@ public class CenterCommentsController extends AbstractController {
 
     @ApiOperation(value = "查询我的评论", notes = "查询我的评论", httpMethod = "POST")
     @PostMapping("/query")
-    public PageResult searchItems(
+    public JsonResult<PageResult<MyCommentVO>> searchItems(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam(value = "userId") String userId,
             @ApiParam(name = "pageNum", value = "页码")
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         startPage();
         List<MyCommentVO> myCommentVOS = centerCommentsService.queryMyComments(userId);
-        return PageResult.setPageResult(myCommentVOS, pageNum);
+        return JsonResult.success(PageResult.setPageResult(myCommentVOS, page));
     }
 }

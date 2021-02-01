@@ -54,7 +54,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        users.setUsername(userBO.getUsername());
         users.setNickname(userBO.getUsername());
         users.setFace(USER_FACE);
         users.setSex(Sex.secret.code);

@@ -58,7 +58,6 @@ public class OrderController extends BaseController {
     @Autowired
     private RedisUtil redisUtil;
 
-    private JsonResult jsonResult = new JsonResult();
 
     @ApiOperation(value = "创建订单", notes = "创建订单", httpMethod = "POST")
     @PostMapping("/create")
@@ -67,12 +66,12 @@ public class OrderController extends BaseController {
         log.info("订单信息:{}", submitOrderBo);
         //判断支付方式是否正确
         if (submitOrderBo.getPayMethod() != PayMethod.WEIXIN.type && submitOrderBo.getPayMethod() != PayMethod.ALIPAY.type) {
-            return jsonResult.error("支付方式不正确!");
+            return JsonResult.error("支付方式不正确!");
         }
         //从redis中获取购物车信息
         String shopCartStr = redisUtil.get(FOODIE_SHOPCART + ":" + submitOrderBo.getUserId());
         if (StringUtils.isBlank(shopCartStr)) {
-            return jsonResult.error("购物车信息有误!");
+            return JsonResult.error("购物车信息有误!");
         }
 
         List<ShopcartBo> shopcartBoList = JsonUtils.jsonToList(shopCartStr, ShopcartBo.class);

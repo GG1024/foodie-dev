@@ -27,14 +27,13 @@ public class CenterController {
     private CenterUserService centerUserService;
 
 
-    private JsonResult jsonResult  = new JsonResult();
 
     @ApiOperation(value = "获取用户信息",notes = "获取用户信息",httpMethod = "GET")
     @GetMapping("/userInfo")
     public JsonResult userInfo(@RequestParam
                                @ApiParam(name ="userId",value = "用户id",required = true)
                                        String userId){
-        return jsonResult.success(centerUserService.queryUserInfoById(userId));
+        return JsonResult.success(centerUserService.queryUserInfoById(userId));
     }
 
 

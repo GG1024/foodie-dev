@@ -43,7 +43,6 @@ import java.util.Map;
 @RequestMapping(value = "/userInfo")
 public class CenterUserController extends BaseController {
 
-    private JsonResult jsonResult = new JsonResult();
 
     //定义头像上传的地址
     //File.separator 不同的系统分隔符不一样
@@ -70,12 +69,12 @@ public class CenterUserController extends BaseController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = getErrors(bindingResult);
             log.info("验证信息:{}", errors);
-            return jsonResult.error(errors);
+            return JsonResult.error(errors);
         }
         Users users = centerUserService.updateUserInfo(userId, centerUserBo);
         UsersVo usersVo = userToken(users);
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVo), true);
-        return jsonResult.success();
+        return JsonResult.success();
     }
 
 
@@ -108,7 +107,7 @@ public class CenterUserController extends BaseController {
                             !suffix.equalsIgnoreCase("png") &&
                             !suffix.equalsIgnoreCase("jpeg")
                     ) {
-                        return jsonResult.error("图片格式不正确!");
+                        return JsonResult.error("图片格式不正确!");
                     }
                     //覆盖式
                     newFileName = "face-" + userId + "." + suffix;
@@ -139,7 +138,7 @@ public class CenterUserController extends BaseController {
 
 
         } else {
-            return jsonResult.error("文件不能为空!");
+            return JsonResult.error("文件不能为空!");
         }
 
         String serverImageUrl = fileUpload.getImageServerUrl() + userId + "/" + newFileName + "?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN);
@@ -149,7 +148,7 @@ public class CenterUserController extends BaseController {
         // 增加令牌token，会整合进redis，分布式会话
         UsersVo usersVo = userToken(users);
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVo), true);
-        return jsonResult.success();
+        return JsonResult.success();
 
     }
 

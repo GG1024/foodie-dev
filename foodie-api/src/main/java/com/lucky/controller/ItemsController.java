@@ -72,48 +72,48 @@ public class ItemsController extends AbstractController {
 
     @ApiOperation(value = "商品评价列表", notes = "商品评价列表", httpMethod = "GET")
     @GetMapping("/comments")
-    public PageResult<ItemsCommentsVo> commentList(@RequestParam String itemId,
+    public JsonResult<PageResult<ItemsCommentsVo>> commentList(@RequestParam String itemId,
                                                    @RequestParam(value = "level", required = false) Integer level,
-                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                                   @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                                    @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         if (StringUtils.isBlank(itemId)) {
             throw new RuntimeException("商品id不能为空!");
         }
         startPage();
         List<ItemsCommentsVo> itemsCommentsVos = itemsService.queryItemsComment(itemId, level);
-        return PageResult.setPageResult(itemsCommentsVos, pageNum);
+        return JsonResult.success(PageResult.setPageResult(itemsCommentsVos, page));
     }
 
     @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表", httpMethod = "GET")
     @GetMapping("/search")
-    public PageResult<SearchItemsVo> searchItems(
+    public JsonResult<PageResult<SearchItemsVo>> searchItems(
             @ApiParam(name = "sort", value = "排序规则", required = true)
             @RequestParam(value = "sort") String sort,
             @ApiParam(name = "keywords", value = "排序规则")
             @RequestParam(value = "keywords") String keywords,
-            @ApiParam(name = "pageNum", value = "页码")
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+            @ApiParam(name = "page", value = "页码")
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         startPage();
         List<SearchItemsVo> searchItemsVos = itemsService.searchItems(keywords, sort);
-        return PageResult.setPageResult(searchItemsVos, pageNum);
+        return JsonResult.success(PageResult.setPageResult(searchItemsVos, page));
     }
 
     @ApiOperation(value = "商品三级分类id搜索商品列表", notes = "商品三级分类id搜索商品列表", httpMethod = "GET")
     @GetMapping("/catItems")
-    public PageResult<SearchItemsVo> searchItemsByThirdCat(
+    public JsonResult<PageResult<SearchItemsVo>> searchItemsByThirdCat(
             @ApiParam(name = "sort", value = "排序规则", required = true)
             @RequestParam(value = "sort") String sort,
             @ApiParam(name = "catId", value = "三级商品id")
             @RequestParam(value = "catId") String catId,
-            @ApiParam(name = "pageNum", value = "页码")
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+            @ApiParam(name = "page", value = "页码")
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @ApiParam(name = "pageSize", value = "每一页显示数")
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         startPage();
         List<SearchItemsVo> searchItemsVos = itemsService.searchItemsByThirdCat(catId, sort);
-        return PageResult.setPageResult(searchItemsVos, pageNum);
+        return JsonResult.success(PageResult.setPageResult(searchItemsVos, page));
     }
 
 

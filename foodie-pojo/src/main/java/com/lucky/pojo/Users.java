@@ -31,7 +31,6 @@ public class Users extends Model<Users> {
 
 	private static final long serialVersionUID = 1610950486696L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "主键id")
 	private String id;
     

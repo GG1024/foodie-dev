@@ -39,19 +39,18 @@ public class PassportController extends BaseController {
     @Autowired
     private RedisUtil redisUtil;
 
-    private JsonResult jsonResult = new JsonResult();
 
     @ApiOperation(value = "检查用户名是否重复", notes = "检查用户名是否重复", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
     public JsonResult checkUsername(String username) {
         if (StringUtils.isBlank(username)) {
-            return jsonResult.error("用户名不能为空");
+            return JsonResult.error("用户名不能为空");
         }
         boolean isExist = usersService.queryUsernameIsExist(username);
         if (isExist) {
-            return jsonResult.error("用户名已经存在");
+            return JsonResult.error("用户名已经存在");
         }
-        return jsonResult.success();
+        return JsonResult.success();
     }
 
 
@@ -64,16 +63,16 @@ public class PassportController extends BaseController {
                 || StringUtils.isBlank(userBO.getConfirmPassword())
 
         ) {
-            return jsonResult.error("用户名或密码不能为空!");
+            return JsonResult.error("用户名或密码不能为空!");
         }
         //判断用户名是否存在
         boolean isExist = usersService.queryUsernameIsExist(userBO.getUsername());
         if (isExist) {
-            return jsonResult.error("用户名已经存在");
+            return JsonResult.error("用户名已经存在");
         }
         //判断两次密码是否一致
         if (!userBO.getPassword().equals(userBO.getConfirmPassword())) {
-            return jsonResult.error("两次密码不一致");
+            return JsonResult.error("两次密码不一致");
         }
         Users users = usersService.register(userBO);
         //生成用户token，存入redis会话
@@ -81,7 +80,7 @@ public class PassportController extends BaseController {
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVo), true);
         //同步购物车数据
         synShopCartData(users.getId(), request, response);
-        return jsonResult.success(users);
+        return JsonResult.success(users);
     }
 
 
@@ -92,12 +91,12 @@ public class PassportController extends BaseController {
         if (StringUtils.isBlank(userBO.getUsername())
                 || StringUtils.isBlank(userBO.getPassword())
         ) {
-            return jsonResult.error("用户名或密码不能为空!");
+            return JsonResult.error("用户名或密码不能为空!");
         }
 
         Users users = usersService.login(userBO.getUsername(), MD5Utils.getMD5Str(userBO.getPassword()));
         if (users == null) {
-            return jsonResult.error("用户名或密码不正确!");
+            return JsonResult.error("用户名或密码不正确!");
         }
 
         //生成用户token，存入redis会话
@@ -106,7 +105,7 @@ public class PassportController extends BaseController {
 
         //同步购物车数据
         synShopCartData(users.getId(), request, response);
-        return jsonResult.success(users);
+        return JsonResult.success(users);
     }
 
     @ApiOperation(value = "用户退出登录", notes = "用户退出登录", httpMethod = "POST")
@@ -121,7 +120,7 @@ public class PassportController extends BaseController {
         // 分布式会话中，需清除用户数据
         redisUtil.delete(REDIS_USER_TOKEN + ":" + userId);
 
-        return jsonResult.success();
+        return JsonResult.success();
     }
 
     /**

@@ -12,7 +12,7 @@ public class TableSupport
     /**
      * 当前记录起始索引
      */
-    public static final String PAGE_NUM = "pageNum";
+    public static final String PAGE = "page";
 
     /**
      * 每页显示记录数
@@ -41,7 +41,7 @@ public class TableSupport
     public static PageDomain getPageDomain()
     {
         PageDomain pageDomain = new PageDomain();
-        pageDomain.setPageNum(ServletUtils.getParameterToInt(PAGE_NUM));
+        pageDomain.setPageNum(ServletUtils.getParameterToInt(PAGE));
         pageDomain.setPageSize(ServletUtils.getParameterToInt(PAGE_SIZE));
         pageDomain.setOrderByColumn(ServletUtils.getParameter(ORDER_BY_COLUMN));
         pageDomain.setIsAsc(ServletUtils.getParameter(IS_ASC));
