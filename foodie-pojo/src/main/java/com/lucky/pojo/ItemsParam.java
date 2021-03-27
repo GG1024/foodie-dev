@@ -57,7 +57,7 @@ public class ItemsParam extends Model<ItemsParam> {
 	private String packagingMethod;
     
 	@ApiModelProperty(name = "weight" , value = "规格重量，例：35g")
-	private BigDecimal weight;
+	private String weight;
     
 	@ApiModelProperty(name = "storageMethod" , value = "存储方法，例：常温5~25°")
 	private String storageMethod;

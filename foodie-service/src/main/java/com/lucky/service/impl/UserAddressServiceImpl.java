@@ -56,8 +56,8 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         String addressId = sid.nextShort();
         BeanUtils.copyProperties(addressBo, userAddress);
         userAddress.setId(addressId);
-        userAddress.setCreateTime(new Date());
-        userAddress.setUpdateTime(new Date());
+        userAddress.setCreatedTime(new Date());
+        userAddress.setUpdatedTime(new Date());
         userAddress.setIsDefault(String.valueOf(isDefault));
         baseMapper.insert(userAddress);
     }
@@ -68,7 +68,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         UserAddress userAddress = new UserAddress();
         BeanUtils.copyProperties(addressBo, userAddress);
         userAddress.setId(addressBo.getAddressId());
-        userAddress.setUpdateTime(new Date());
+        userAddress.setUpdatedTime(new Date());
         baseMapper.updateById(userAddress);
     }
 

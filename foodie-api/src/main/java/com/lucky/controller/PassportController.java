@@ -42,7 +42,7 @@ public class PassportController extends BaseController {
 
     @ApiOperation(value = "检查用户名是否重复", notes = "检查用户名是否重复", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
-    public JsonResult checkUsername(String username) {
+    public JsonResult checkUsername(@RequestParam String username) {
         if (StringUtils.isBlank(username)) {
             return JsonResult.error("用户名不能为空");
         }
@@ -70,6 +70,11 @@ public class PassportController extends BaseController {
         if (isExist) {
             return JsonResult.error("用户名已经存在");
         }
+        //密码长度不能少于6位
+        if (userBO.getPassword().length() < 6) {
+            return JsonResult.error("密码长度不能少于6位");
+        }
+
         //判断两次密码是否一致
         if (!userBO.getPassword().equals(userBO.getConfirmPassword())) {
             return JsonResult.error("两次密码不一致");

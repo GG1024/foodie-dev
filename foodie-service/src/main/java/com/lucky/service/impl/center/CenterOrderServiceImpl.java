@@ -95,7 +95,7 @@ public class CenterOrderServiceImpl implements CenterOrderService {
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteOrder(String orderId, String userId) {
         Orders orders = new Orders();
-        orders.setUpdateTime(new Date());
+        orders.setUpdatedTime(new Date());
         orders.setIsDelete(YesOrNo.YES.code);
 
         QueryWrapper<Orders> where = new QueryWrapper<>();

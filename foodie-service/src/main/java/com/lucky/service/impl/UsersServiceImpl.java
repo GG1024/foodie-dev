@@ -6,17 +6,18 @@
 package com.lucky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lucky.bo.UserBO;
 import com.lucky.enums.Sex;
-import com.lucky.pojo.Users;
 import com.lucky.mapper.UsersMapper;
+import com.lucky.pojo.Users;
 import com.lucky.service.UsersService;
+import com.lucky.utils.DateUtil;
 import com.lucky.utils.MD5Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,10 +39,12 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryUsernameIsExist(String username) {
         QueryWrapper<Users> where = new QueryWrapper<>();
         where.lambda().eq(Users::getUsername, username);
-        return baseMapper.selectCount(where) > 0;
+        Users users = baseMapper.selectOne(where);
+        return users == null ? false : true;
     }
 
     @Override
@@ -57,9 +60,10 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         users.setUsername(userBO.getUsername());
         users.setNickname(userBO.getUsername());
         users.setFace(USER_FACE);
+        users.setBirthday(DateUtil.stringToDate("1900-01-01"));
         users.setSex(Sex.secret.code);
-        users.setCreateTime(new Date());
-        users.setUpdateTime(new Date());
+        users.setCreatedTime(new Date());
+        users.setUpdatedTime(new Date());
 
         baseMapper.insert(users);
 

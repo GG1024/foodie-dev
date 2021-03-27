@@ -84,7 +84,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         orders.setReceiverMobile(address.getMobile());
         orders.setReceiverAddress(address.getProvince() + "" + address.getCity() + "" + address.getDistrict() + "" + address.getDetail());
         orders.setCreatedTime(new Date());
-        orders.setUpdateTime(new Date());
+        orders.setUpdatedTime(new Date());
 
         //设置邮费 当前为0
         int postAmount = 0;

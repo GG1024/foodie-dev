@@ -41,7 +41,7 @@ public class CenterUserServiceImpl implements CenterUserService {
         Users updateUser = new Users();
         BeanUtils.copyProperties(centerUserBo, updateUser);
         updateUser.setId(userId);
-        updateUser.setUpdateTime(new Date());
+        updateUser.setUpdatedTime(new Date());
         usersMapper.updateById(updateUser);
         return queryUserInfoById(userId);
     }
@@ -51,7 +51,7 @@ public class CenterUserServiceImpl implements CenterUserService {
     public Users updateUserFace(String userId, String faceUrl) {
         Users updateUser = new Users();
         updateUser.setId(userId);
-        updateUser.setUpdateTime(new Date());
+        updateUser.setUpdatedTime(new Date());
         updateUser.setFace(faceUrl);
         usersMapper.updateById(updateUser);
         return queryUserInfoById(userId);

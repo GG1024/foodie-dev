@@ -24,22 +24,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return builder.build();
     }
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        CorsConfiguration config = new CorsConfiguration();
-//        //设置允许跨域请求的域名
-//        config.addAllowedOrigin("*");
-//        //设置允许的方法
-//        config.addAllowedMethod("*");
-//
-//        config.setAllowCredentials(true);
-//        //设置允许头
-//        config.addAllowedHeader("*");
-//        //config.addExposedHeader("token");
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
 
     @Bean
     public UserTokenInterceptor userTokenInterceptor() {

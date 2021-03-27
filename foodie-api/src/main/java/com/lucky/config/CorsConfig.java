@@ -20,19 +20,19 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter(){
-//        1、添加cors配置信息
+        //1、添加cors配置信息
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:8080");
-//      设置允许客户端携带一些cookie等信息过来
+        //设置允许客户端携带一些cookie等信息过来
         config.setAllowCredentials(true);
-//        设置允许请求的方式
+        //设置允许请求的方式
         config.addAllowedMethod("*");
-//        设置允许的header
+        //设置允许的header
         config.addAllowedHeader("*");
 
-//        2、为url添加映射路径
+        //2、为url添加映射路径
         UrlBasedCorsConfigurationSource corsSource = new UrlBasedCorsConfigurationSource();
-//        configo配置信息适用所有的路由
+        //configo配置信息适用所有的路由
         corsSource.registerCorsConfiguration("/**",config);
 
         return new CorsFilter(corsSource);

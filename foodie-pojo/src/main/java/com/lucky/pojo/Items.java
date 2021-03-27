@@ -57,12 +57,12 @@ public class Items extends Model<Items> {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "createTime" , value = "创建时间")
-	private Date createTime;
+	private Date createdTime;
     
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty(name = "updateTime" , value = "更新时间")
-	private Date updateTime;
+	private Date updatedTime;
     
 
 	@Override

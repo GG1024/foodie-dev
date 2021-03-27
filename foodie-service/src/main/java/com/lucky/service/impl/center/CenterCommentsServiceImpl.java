@@ -83,7 +83,7 @@ public class CenterCommentsServiceImpl implements CenterCommentsService {
         //更新订单为已评论
         Orders orders = new Orders();
         orders.setIsComment(YesOrNo.YES.code);
-        orders.setUpdateTime(new Date());
+        orders.setUpdatedTime(new Date());
 
         QueryWrapper<Orders> orderWhere = new QueryWrapper<>();
         orderWhere.lambda().eq(Orders::getId, orderId);
