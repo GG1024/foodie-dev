@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     private CategoryMapperCustom categoryMapperCustom;
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Category> queryAllRootCat() {
         QueryWrapper<Category> where = new QueryWrapper<>();
         where.lambda().eq(Category::getType, "1");
@@ -39,11 +42,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<CategoryVo> querySubCatList(Integer rootCatId) {
         return categoryMapperCustom.getSubCatList(rootCatId);
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<NewItemsVo> getSixNewItemsList(Integer rootCatId) {
         return categoryMapperCustom.getSixNewItemList(rootCatId);
     }
