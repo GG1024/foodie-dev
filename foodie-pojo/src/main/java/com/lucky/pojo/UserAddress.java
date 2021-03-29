@@ -31,7 +31,7 @@ public class UserAddress extends Model<UserAddress> {
 
 	private static final long serialVersionUID = 1610950474363L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
+
 	@ApiModelProperty(name = "id" , value = "")
 	private String id;
     

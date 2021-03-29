@@ -5,6 +5,7 @@
  */
 package com.lucky.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.lucky.bo.ShopcartBo;
 import com.lucky.bo.SubmitOrderBo;
 import com.lucky.core.JsonResult;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,7 +64,8 @@ public class OrderController extends BaseController {
     @ApiOperation(value = "创建订单", notes = "创建订单", httpMethod = "POST")
     @PostMapping("/create")
     public JsonResult add(
-            @RequestBody SubmitOrderBo submitOrderBo, HttpServletRequest request, HttpServletResponse response) {
+            @RequestBody SubmitOrderBo submitOrderBo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         log.info("订单信息:{}", JsonUtils.objectToJson(submitOrderBo));
         //判断支付方式是否正确
         if (!submitOrderBo.getPayMethod().equals(PayMethod.WEIXIN.type) && submitOrderBo.getPayMethod().equals(PayMethod.ALIPAY.type)) {
@@ -70,40 +73,46 @@ public class OrderController extends BaseController {
         }
         //从redis中获取购物车信息
         String shopCartStr = redisUtil.get(FOODIE_SHOPCART + ":" + submitOrderBo.getUserId());
-        if (StringUtils.isBlank(shopCartStr)) {
+        List<ShopcartBo> shopcartBoList = JsonUtils.jsonToList(shopCartStr, ShopcartBo.class);
+        if (StringUtils.isBlank(shopCartStr)||CollectionUtils.isEmpty(shopcartBoList)) {
             return JsonResult.error("购物车信息有误!");
         }
 
-        List<ShopcartBo> shopcartBoList = JsonUtils.jsonToList(shopCartStr, ShopcartBo.class);
-        //1、创建订单
-        OrderVo orderVo = orderService.createOrder(submitOrderBo, shopcartBoList);
-        String orderId = orderVo.getOrderId();
-        MerchantOrdersVo merchantOrdersVo = orderVo.getMerchantOrdersVo();
-        merchantOrdersVo.setReturnUrl(returnUrl);
-        //2、创建订单后，移除购物车中已结算商品
-        // 整合redis后，完善购物车的结算清除，并同步到前端cookie
-        shopcartBoList.removeAll(orderVo.getWaitRemoveShopCartBo());
-        redisUtil.set(FOODIE_SHOPCART + ":" + submitOrderBo.getUserId(), JsonUtils.objectToJson(shopcartBoList));
-        CookieUtils.setCookie(request, response, FOODIE_SHOP, JsonUtils.objectToJson(shopcartBoList));
 
-        //3、向支付中心发送当前订单，用于保存支付中心的订单数据
+        String orderId = null;
+        try {
+            OrderVo orderVo = orderService.createOrder(submitOrderBo, shopcartBoList);
+            orderId = orderVo.getOrderId();
+            MerchantOrdersVo merchantOrdersVo = orderVo.getMerchantOrdersVo();
+            merchantOrdersVo.setReturnUrl(returnUrl);
+            //2、创建订单后，移除购物车中已结算商品
+            // 整合redis后，完善购物车的结算清除，并同步到前端cookie
+            shopcartBoList.removeAll(orderVo.getWaitRemoveShopCartBo());
+            redisUtil.set(FOODIE_SHOPCART + ":" + submitOrderBo.getUserId(), JsonUtils.objectToJson(shopcartBoList));
+            CookieUtils.setCookie(request, response, FOODIE_SHOP, JsonUtils.objectToJson(shopcartBoList));
 
-        /**
-         * 构建rest请求
-         * http
-         * spring rest
-         */
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("imoocUserId", "imooc");
-        headers.add("password", "imooc");
-        HttpEntity<MerchantOrdersVo> httpEntity = new HttpEntity<>(merchantOrdersVo, headers);
-        ResponseEntity<JsonResult> jsonResultResponseEntity = restTemplate.postForEntity(paymentUrl, httpEntity, JsonResult.class);
-        JsonResult jsonResult = jsonResultResponseEntity.getBody();
-        log.info("调用结果：{}", jsonResult.getMessage());
-        System.out.println(jsonResult);
-        if (jsonResult.getCode() != 200) {
-            return JsonResult.error("支付中心创建订单失败，请联系管理员!");
+            //3、向支付中心发送当前订单，用于保存支付中心的订单数据
+
+            /**
+             * 构建rest请求
+             * http
+             * spring rest
+             */
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("imoocUserId", "imooc");
+            headers.add("password", "imooc");
+            HttpEntity<MerchantOrdersVo> httpEntity = new HttpEntity<>(merchantOrdersVo, headers);
+            ResponseEntity<JsonResult> jsonResultResponseEntity = restTemplate.postForEntity(paymentUrl, httpEntity, JsonResult.class);
+            JsonResult jsonResult = jsonResultResponseEntity.getBody();
+            log.info("调用结果：{}", JsonUtils.objectToJson(jsonResult));
+            if (jsonResult.getCode() != HttpStatus.OK.value()) {
+                return JsonResult.error("支付中心创建订单失败，请联系管理员!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //手动回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         return JsonResult.success(orderId);
     }
@@ -112,8 +121,11 @@ public class OrderController extends BaseController {
     @PostMapping("/notifyMerchantOrderPaid")
     @ApiOperation(value = "支付中心支付成功通知方法", notes = "支付中心支付成功通知方法", httpMethod = "POST")
     //支付中心支付成功通知方法
-    public Integer notifyMerchantOrderPaid(String merchantOrderId) {
+    public Integer notifyMerchantOrderPaid(String merchantOrderId) throws Exception {
         orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
     }
+
+
+
 }

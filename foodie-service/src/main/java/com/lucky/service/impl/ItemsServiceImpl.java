@@ -7,6 +7,7 @@ package com.lucky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lucky.enums.Level;
+import com.lucky.enums.YesOrNo;
 import com.lucky.mapper.*;
 import com.lucky.pojo.*;
 import com.lucky.service.ItemsService;
@@ -135,6 +136,7 @@ public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements
     public ItemsImg queryItemMainImg(String itemId) {
         QueryWrapper<ItemsImg> where = new QueryWrapper<>();
         where.lambda().eq(ItemsImg::getItemId, itemId);
+        where.lambda().eq(ItemsImg::getIsMain, YesOrNo.YES.code);
         return itemsImgMapper.selectOne(where);
     }
 
@@ -173,7 +175,7 @@ public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements
     @Transactional(propagation = Propagation.REQUIRED)
     public void decreaseItemSpecStock(String itemSpecId, int buyCount) {
         int count = itemsMapperCustom.decreaseItemSpecStock(itemSpecId, buyCount);
-        if (count!=1){
+        if (count != 1) {
             throw new RuntimeException("库存扣减失败，库存不足");
         }
     }

@@ -32,7 +32,6 @@ public class Items extends Model<Items> {
 
 	private static final long serialVersionUID = 1610950351041L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "")
 	private String id;
     

@@ -53,9 +53,8 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
             isDefault = 1;
         }
         UserAddress userAddress = new UserAddress();
-        String addressId = sid.nextShort();
         BeanUtils.copyProperties(addressBo, userAddress);
-        userAddress.setId(addressId);
+        userAddress.setId(sid.nextShort());
         userAddress.setCreatedTime(new Date());
         userAddress.setUpdatedTime(new Date());
         userAddress.setIsDefault(String.valueOf(isDefault));

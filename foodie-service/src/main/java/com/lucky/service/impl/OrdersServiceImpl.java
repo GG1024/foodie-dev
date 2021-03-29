@@ -65,7 +65,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public OrderVo createOrder(SubmitOrderBo submitOrderBo, List<ShopcartBo> shopcartBoList) {
+    public OrderVo createOrder(SubmitOrderBo submitOrderBo, List<ShopcartBo> shopcartBoList)throws Exception {
         String userId = submitOrderBo.getUserId();
         String itemSpecIds = submitOrderBo.getItemSpecIds();
         Integer payMethod = submitOrderBo.getPayMethod();
@@ -171,7 +171,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateOrderStatus(String orderId, Integer orderStatus) {
+    public void updateOrderStatus(String orderId, Integer orderStatus) throws Exception{
         QueryWrapper<OrderStatus> where = new QueryWrapper<>();
         where.lambda().eq(OrderStatus::getOrderId, orderId);
         OrderStatus paidStatus = new OrderStatus();
@@ -182,7 +182,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void closeOrders() {
+    public void closeOrders() throws Exception{
 
         //查询所有未支付订单，如果创建时间大于1天，关闭订单
         QueryWrapper<OrderStatus> where = new QueryWrapper<>();
@@ -204,7 +204,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     }
 
     @Override
-    public void closeOrdersByOrderId(String orderId) {
+    public void closeOrdersByOrderId(String orderId)throws Exception {
         doCloseOrders(orderId);
     }
 
@@ -220,7 +220,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     }
 
-    private ShopcartBo getShopcartBoFromRedis(List<ShopcartBo> shopcartBos, String itemSpecId) {
+    private ShopcartBo getShopcartBoFromRedis(List<ShopcartBo> shopcartBos, String itemSpecId)throws Exception {
         for (ShopcartBo shopcartBo : shopcartBos) {
             if (itemSpecId.equalsIgnoreCase(shopcartBo.getSpecId())){
                 return shopcartBo;

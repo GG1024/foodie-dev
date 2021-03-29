@@ -32,7 +32,6 @@ public class Orders extends Model<Orders> {
 
 	private static final long serialVersionUID = 1610950462230L;
 	
-	@TableId(value = "id", type = IdType.AUTO)
 	@ApiModelProperty(name = "id" , value = "同时也是订单编号")
 	private String id;
     
