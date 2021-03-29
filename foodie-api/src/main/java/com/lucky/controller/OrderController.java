@@ -43,7 +43,7 @@ import java.util.List;
  */
 @Api(description = "订单表", value = "订单表")
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 @Slf4j
 public class OrderController extends BaseController {
 
@@ -63,9 +63,9 @@ public class OrderController extends BaseController {
     @PostMapping("/create")
     public JsonResult add(
             @RequestBody SubmitOrderBo submitOrderBo, HttpServletRequest request, HttpServletResponse response) {
-        log.info("订单信息:{}", submitOrderBo);
+        log.info("订单信息:{}", JsonUtils.objectToJson(submitOrderBo));
         //判断支付方式是否正确
-        if (submitOrderBo.getPayMethod() != PayMethod.WEIXIN.type && submitOrderBo.getPayMethod() != PayMethod.ALIPAY.type) {
+        if (!submitOrderBo.getPayMethod().equals(PayMethod.WEIXIN.type) && submitOrderBo.getPayMethod().equals(PayMethod.ALIPAY.type)) {
             return JsonResult.error("支付方式不正确!");
         }
         //从redis中获取购物车信息
@@ -103,9 +103,9 @@ public class OrderController extends BaseController {
         log.info("调用结果：{}", jsonResult.getMessage());
         System.out.println(jsonResult);
         if (jsonResult.getCode() != 200) {
-            return jsonResult.error("支付中心创建订单失败，请联系管理员!");
+            return JsonResult.error("支付中心创建订单失败，请联系管理员!");
         }
-        return jsonResult.success(orderId);
+        return JsonResult.success(orderId);
     }
 
 
