@@ -41,10 +41,10 @@ public class ShopCatController extends BaseController {
         if (StringUtils.isBlank(userId)) {
             return JsonResult.error("");
         }
-        log.info(shopcartBo.toString());
+        log.info(JsonUtils.objectToJson(shopcartBo));
         //前端用户在登录得情况下，用户添加购物车会同步到redis缓存
         String shopCart = redisUtil.get(FOODIE_SHOPCART + ":" + userId);
-        log.info("redis购物车中商品信息：{}", shopCart);
+        log.info("redis购物车中商品信息：{}", JsonUtils.objectToJson(shopCart));
         List<ShopcartBo> shopcartBoList = null;
         if (StringUtils.isNotBlank(shopCart)) {
             shopcartBoList = JsonUtils.jsonToList(shopCart, ShopcartBo.class);
