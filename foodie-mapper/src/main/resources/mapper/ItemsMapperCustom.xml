@@ -37,7 +37,7 @@
         ON i.id = temp.item_id
         WHERE ii.is_main = 1
         <if test="map.keywords!=null and map.keywords!=''">
-            AND i.item_name like '%${paramMap.keywords}%'
+            AND i.item_name like '%${map.keywords}%'
         </if>
         order by
         <choose>
