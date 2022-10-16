@@ -51,7 +51,7 @@ public class UserTokenInterceptor implements HandlerInterceptor {
             returnErrorResponse(response, JsonResult.error("请登录"));
             return false;
         }
-        return false;
+        return true;
     }
 
 
