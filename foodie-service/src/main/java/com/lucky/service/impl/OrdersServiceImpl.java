@@ -182,7 +182,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void closeOrders() throws Exception{
+    public void closeOrders() {
 
         //查询所有未支付订单，如果创建时间大于1天，关闭订单
         QueryWrapper<OrderStatus> where = new QueryWrapper<>();
@@ -207,8 +207,8 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     public void closeOrdersByOrderId(String orderId)throws Exception {
         doCloseOrders(orderId);
     }
-
-    private void doCloseOrders(String orderId) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void doCloseOrders(String orderId) {
         QueryWrapper<OrderStatus> where = new QueryWrapper<>();
         where.lambda().eq(OrderStatus::getOrderId, orderId);
 

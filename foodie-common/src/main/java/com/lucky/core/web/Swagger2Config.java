@@ -38,7 +38,7 @@ public class Swagger2Config implements Serializable {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("")
+                .title("天天吃货 电商平台接口api")
                 .description("foodie-dev")
                 .contact("")
                 .version("1.0")

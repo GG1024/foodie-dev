@@ -24,8 +24,11 @@ public interface OrdersService extends IService<Orders> {
 
     void updateOrderStatus(String orderId, Integer orderStatus) throws Exception;
 
-    void closeOrders() throws Exception;
+    void closeOrders() ;
 
     void closeOrdersByOrderId(String orderId) throws Exception;
+
+
+
 
 }
