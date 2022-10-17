@@ -39,7 +39,7 @@
 			AND os.order_status = #{map.orderStatus}
 		</if>
 		ORDER BY
-		o.update_time DESC
+		o.updated_time DESC
 	</select>
 
 	<select id="queryOrderItem" parameterType="string" resultType="com.lucky.vo.MySubOrderItemVO">
